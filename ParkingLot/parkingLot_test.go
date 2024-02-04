@@ -55,7 +55,28 @@ func TestParkCarWhenLotisFull(t *testing.T) {
     lot.ParkCar(carA)
 	ticket,err := lot.ParkCar(carB)
     if err != nil || ticket != "" {
-		wantErr := errors.New("Parking lot is full")
+		wantErr := errors.New("Can't par already exist with the same vechile number")
+        assert.Equal(t,wantErr,err)
+		return
+    }
+
+
+}
+
+func TestParkCarTheSameCarAgain(t *testing.T) {
+    lot, err := NewParkingLot(2)
+    if err != nil {
+		wantErr := errors.New("Slots can't be empty or negative")
+        assert.Equal(t,wantErr,err)
+		return
+    }
+
+    carA := carPkg.NewCar("ABC123", "Red")
+	carB := carPkg.NewCar("ABC123", "Red")
+    lot.ParkCar(carA)
+	ticket,err := lot.ParkCar(carB)
+    if err != nil || ticket == "" {
+		wantErr := errors.New("Can't par already exist with the same vechile number")
         assert.Equal(t,wantErr,err)
 		return
     }

@@ -8,11 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// func TestNewSlot(t *testing.T){
-//     slot := &Slot{}
-//     assert.Equal(t,slot,&Slot{})
-// }
-
 func TestIsEmpty(t *testing.T) {
 	s := NewSlot()
 	assert.True(t, s.IsEmpty(), "Newly created slot should be empty")

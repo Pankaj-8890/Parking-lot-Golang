@@ -5,6 +5,7 @@ import(
 	slotPkg "parkinglot/Slot"
 	"fmt"
 	carPkg "parkinglot/Car"
+    "reflect"
 )
 
 type ParkingLot struct {
@@ -33,10 +34,13 @@ func NewParkingLot(numberOfSlots int) (*ParkingLot, error) {
 
 func (p *ParkingLot) ParkCar(car *carPkg.Car) (string, error) {
 	emptySlotIndex := p.findEmptySlot()
+    if(p.isCarExist(car)){
+        return "", fmt.Errorf("Can't par already exist with the same vechile number")
+    }
+
 	if emptySlotIndex == -1 {
 		return "", fmt.Errorf("Parking lot is full")
 	}
-
 	ticket, err := p.slots[emptySlotIndex].ParkCar(car)
 	if err != nil {
 		return "", err
@@ -77,6 +81,17 @@ func (p *ParkingLot) findEmptySlot() int {
    return -1
 }
 
+func (p *ParkingLot)isCarExist(car *carPkg.Car)bool{
+    for _, slot := range p.slots {
+        if slot.IsEmpty(){
+            continue
+        } 
+        if  reflect.DeepEqual(car.VehicleNo, slot.Car.VehicleNo) {
+            return true
+        }
+    }
+    return false
+}
 func (p *ParkingLot) getParkedCarSlot(ticket string) *slotPkg.Slot {
    for _, slot := range p.slots {
        if slot.IsValidTicket(ticket) {

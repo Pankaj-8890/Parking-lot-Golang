@@ -25,7 +25,7 @@ func (s *Slot) IsEmpty() bool {
 }
 
 func (s *Slot) ParkCar(car *carPkg.Car) (string, error) {
-	if !s.IsEmpty() {
+	if !s.IsEmpty(){
 		return "", fmt.Errorf("Slot is already occupied")
 	}
 	s.Car = car

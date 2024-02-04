@@ -96,7 +96,12 @@ func TestPark3CarThroughParkingLotsWhenThere_is_2SlotsAvailable(t *testing.T) {
 }
 func TestUnParkCarThroughParkingLotsWithValidCarTicket(t *testing.T) {
     parkingAttendant := NewParkingAttendant()
-    parkingLot, _ := parkingLotPkg.NewParkingLot(1)
+    parkingLot, err := parkingLotPkg.NewParkingLot(1)
+    if err != nil {
+		wantErr := errors.New("Slots can't be empty or negative")
+        assert.Equal(t,wantErr,err)
+		return
+    }
     parkingAttendant.Add(parkingLot)
     car := carPkg.NewCar("xyz01", "blue")
     ticket, err := parkingLot.ParkCar(car)
@@ -118,7 +123,12 @@ func TestUnParkCarThroughParkingLotsWithValidCarTicket(t *testing.T) {
 
 func TestUnParkCarThroughParkingLotsWithInvalidCarTicket(t *testing.T) {
     parkingAttendant := NewParkingAttendant()
-    parkingLot, _ := parkingLotPkg.NewParkingLot(1)
+    parkingLot, err := parkingLotPkg.NewParkingLot(1)
+    if err != nil {
+		wantErr := errors.New("Slots can't be empty or negative")
+        assert.Equal(t,wantErr,err)
+		return
+    }
     parkingAttendant.Add(parkingLot)
     car := carPkg.NewCar("xyz01", "blue")
     ticket, err := parkingLot.ParkCar(car)
@@ -144,13 +154,19 @@ func TestUnParkCarThroughParkingLotsWithInvalidCarTicket(t *testing.T) {
 func TestParkCarThroughTwoParkingAttendants(t *testing.T) {
     parkingAttendant := NewParkingAttendant()
     secondParkingAttendant := NewParkingAttendant()
-    parkingLot, _ := parkingLotPkg.NewParkingLot(2)
+    parkingLot, err := parkingLotPkg.NewParkingLot(2)
+    if err != nil {
+		wantErr := errors.New("Slots can't be empty or negative")
+        assert.Equal(t,wantErr,err)
+		return
+    }
     parkingAttendant.Add(parkingLot)
     secondParkingAttendant.Add(parkingLot)
 
-    car := carPkg.NewCar("xyz01", "blue")
-    parkingAttendant.ParkCar(car)
-    secondParkingAttendant.ParkCar(car)
+    carA := carPkg.NewCar("xyz01", "blue")
+    carB := carPkg.NewCar("xyz01", "blue")
+    parkingAttendant.ParkCar(carA)
+    secondParkingAttendant.ParkCar(carB)
 
     assert.True(t, parkingLot.IsFull(), "Expected parking lot to be full")
 }
